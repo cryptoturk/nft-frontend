@@ -4,11 +4,11 @@ var web3 = new Web3(Web3.givenProvider);
 var infura_pID = "563a1906d51f46b4b6cc3012ef766cc3";
 var bscaddress="0x"; 
 var bscconnected;
-var audioPunches = new Audio("assets/punches.mp3");
-var audioWin = new Audio("assets/win.mp3");
-var audioLose = new Audio("assets/lose.mp3");
-var audioConfetti = new Audio("assets/confetti.mp3");
-var audioWawa = new Audio("assets/wawa.mp3");
+var audioPunches = new Audio("../assets/punches.mp3");
+var audioWin = new Audio("../assets/win.mp3");
+var audioLose = new Audio("../assets/lose.mp3");
+var audioConfetti = new Audio("../assets/confetti.mp3");
+var audioWawa = new Audio("../assets/wawa.mp3");
 
 function isConnected() {
   document.getElementById('web3-wrapper').style.display = 'flex';
@@ -608,9 +608,9 @@ async function getMonsterPower() {
       
 
         if(monsterPower[5] < monsterPower[4]) {
-          document.getElementById('status' + index).innerHTML='<img src="assets/attacker.png">';
+          document.getElementById('status' + index).innerHTML='<img src="../assets/attacker.png">';
         } else {
-          document.getElementById('status' + index).innerHTML='<img src="assets/defender.png">';
+          document.getElementById('status' + index).innerHTML='<img src="../assets/defender.png">';
         }
 
       }
@@ -881,13 +881,13 @@ async function acceptBattle(battleId) {
                 <div id="innerR">
                   <img src="${baseURI}${p1}.png">
                 </div>
-                <img src="assets/vs.png" id="merger">
+                <img src="../assets/vs.png" id="merger">
                 <div id="innerL">
                   <img src="${baseURI}${id}.png">
                 </div>
               </div>
               <div id="animation">
-                <img src="assets/fight-cartoon.gif">
+                <img src="../assets/fight-cartoon.gif">
               </div>`,
         showConfirmButton: false,
         allowOutsideClick: false,
@@ -927,7 +927,7 @@ async function acceptBattle(battleId) {
                   <div id="WinnerR">
                     <img src="${baseURI}${p1}.png">
                   </div>
-                  <img src="assets/vs.png" id="Wmerger">
+                  <img src="../assets/vs.png" id="Wmerger">
                   <div id="WinnerL">
                     <img src="${baseURI}${id}.png">
                   </div>
@@ -1058,7 +1058,7 @@ async function acceptBattle(battleId) {
                   <div id="WinnerR">
                     <img src="${baseURI}${p1}.png">
                   </div>
-                  <img src="assets/vs.png" id="Wmerger">
+                  <img src="../assets/vs.png" id="Wmerger">
                   <div id="WinnerL">
                     <img src="${baseURI}${id}.png">
                   </div>
@@ -1177,7 +1177,7 @@ async function createBattle() {
     contract.methods.createBattle(id).send({from: account[0]})
     .on('transactionHash', function (hash) {
       Swal.fire({
-        html: `<div class="swalCreateBattle"><img class="slide-fwd-center" src="${baseURI}${id}.png"><img src="assets/vs.png" height="50"><img class="slide-fwd-center" src="assets/qm.png"></div>`,
+        html: `<div class="swalCreateBattle"><img class="slide-fwd-center" src="${baseURI}${id}.png"><img src="../assets/vs.png" height="50"><img class="slide-fwd-center" src="../assets/qm.png"></div>`,
         title: `Creating battle...`,
         showConfirmButton: false,
         allowOutsideClick: false,
