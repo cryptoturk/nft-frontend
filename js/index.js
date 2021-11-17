@@ -834,12 +834,12 @@ async function updateBattles() {
       
    
       document.getElementById("battle" + i).innerHTML = `
-          <td style="width:10%">${battles.index}</td>
+          <td style="width:10%">${i}</td>
           <td style="width:10%" id ="endedBat${i}">${battles.ended}</td>
           <td style="width:10%" id ="winnerBat${i}">${battles.winnerId}</td>
           <td style="width:25%;display: flex; align-items: center; justify-content: center;" id ="warBat${i}"><img src="${baseURI}${battles.p1CarId}.png"><img src="assets/vs.png"><img src="${baseURI}${battles.p2CarId}.png"></td>
-          <td style="width:22.5%"><button id ="acceptBat${i}" onclick="acceptBattle(${battles.index});">Accept Battle</button></td>
-          <td style="width:22.5%"><button id ="endBat${i}" onClick="endBattle(${battles.index});">Upgrade Kraken</button></td>`
+          <td style="width:22.5%"><button id ="acceptBat${i}" onclick="acceptBattle(${i});">Accept Battle</button></td>
+          <td style="width:22.5%"><button id ="endBat${i}" onClick="endBattle(${i});">Upgrade Kraken</button></td>`
       
       if(battles.ended == 2) {
         document.getElementById("endedBat" + i).innerText = "Ended";
