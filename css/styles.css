@@ -58,6 +58,7 @@ body {
   word-break: break-all;
   margin-right: auto;
   text-align: center;
+  z-index: 999;
 }
 .metamask-button {
   align-items: center;
