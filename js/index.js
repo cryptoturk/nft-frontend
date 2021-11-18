@@ -141,7 +141,8 @@ window.onload = async function(){
       } else {
         isConnected();
         getMonsterPower();
-        updateBattles()
+        clearBattleDom();
+        updateBattles();
       } 
     }
     
@@ -250,7 +251,8 @@ async function switchNetwork() {
         params: [{ chainId: '0x61' }], // chainId must be in hexadecimal numbers
       });
       detectChainId()
-      updateBattles()
+      clearBattleDom();
+      updateBattles();
       // getMonsterPower()
     } catch (error) {
       // This error code indicates that the chain has not been added to MetaMask
@@ -268,14 +270,15 @@ async function switchNetwork() {
                   decimals: 18
                 },
                 chainId: '0x61',
-                rpcUrl: `https://data-seed-prebsc-2-s3.binance.org:8545`,
+                rpcUrl: `https://data-seed-prebsc-1-s3.binance.org:8545/`,
                 blockExplorerUrls: 'https://testnet.bscscan.com'
               },
             ],
           });
           detectChainId()
           getMonsterPower()
-          updateBattles()
+          clearBattleDom();
+          updateBattles();
         } catch (addError) {
           console.error(addError);
         }
@@ -308,7 +311,7 @@ if (window.ethereum) {
       const chainidnetwork = await provider.request({
         method: 'eth_chainId'
       })
-
+      clearBattleDom();
       if(chainidnetwork == "0x61") {
         if(accounts.length > 0) {
           bscaddress = accounts[0];
@@ -316,6 +319,8 @@ if (window.ethereum) {
           document.getElementById('address').innerHTML = bscaddress;
           updateMonster();
           getMonsterPower();
+          
+          updateBattles();
         }
     
         if(!accounts.length) {
@@ -323,6 +328,8 @@ if (window.ethereum) {
           bscaddress = accounts[0];
           isNotConnected();
           updateMonster();
+          // clearBattleDom();
+          updateBattles();
           const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -586,7 +593,7 @@ async function getMonsterPower() {
       
    
       document.getElementById("token" + index).innerHTML = `
-      <img id="nftImg" src="https://plusbit.tech/nft/images/${allTokens[index]}.png">
+      <img id="nftImg" src="${baseURI}${allTokens[index]}.png">
       <div class="frame-header"> 
         <p>Token Id: <span>${allTokens[index]}</span> </p>
         <p class="status" id="status${index}"></p>
@@ -609,8 +616,11 @@ async function getMonsterPower() {
 
         if(monsterPower[5] < monsterPower[4]) {
           document.getElementById('status' + index).innerHTML='<img src="assets/attacker.png">';
+          // document.querySelector(":root").style.setProperty('--seconderColor', '#7c7c7c');
+
         } else {
           document.getElementById('status' + index).innerHTML='<img src="assets/defender.png">';
+          // document.querySelector(":root").style.setProperty('--seconderColor', '#6e436d');
         }
 
       }
@@ -834,6 +844,7 @@ async function updateBattles() {
       
    
       document.getElementById("battle" + i).innerHTML = `
+          <span id='battleView' style="width:10px;height:10px;border-radius:50%;position:relative;left:5px;background:#0bc214"></span>
           <td style="width:10%">${i}</td>
           <td style="width:10%" id ="endedBat${i}">${battles.ended}</td>
           <td style="width:10%" id ="winnerBat${i}">${battles.winnerId}</td>
@@ -844,16 +855,40 @@ async function updateBattles() {
       if(battles.ended == 2) {
         document.getElementById("endedBat" + i).innerText = "Ended";
         document.getElementById("acceptBat" + i).disabled = true;
+        document.getElementById("acceptBat" + i).style.opacity = "0.5";
         document.getElementById("endBat" + i).disabled = true;
+        document.getElementById("endBat" + i).style.opacity = "0.5";
       }else if(battles.ended == 1) {
         document.getElementById("endedBat" + i).innerText = "Claim";
         document.getElementById("acceptBat" + i).disabled = true;
+        document.getElementById("acceptBat" + i).style.opacity = "0.5";
+        if (allTokens.includes(battles.winnerId)) {
+          document.getElementById("endBat" + i).disabled = false;
+        } else {
+          document.getElementById("endBat" + i).disabled = true;
+          document.getElementById("endBat" + i).style.opacity = "0.5";
+        }
       }else if(battles.ended == 0) {
         document.getElementById("endedBat" + i).innerText = "Open";
         document.getElementById("endBat" + i).disabled = true;
+        document.getElementById("endBat" + i).style.opacity = "0.5";
         document.getElementById("winnerBat" + i).innerText = "-";
         document.getElementById("warBat" + i).innerHTML = `<img src="assets/quest1.png"><img src="assets/vs.png"><img src="assets/quest.png">`;
-      } 
+        if (allTokens.includes(battles.p1CarId)) {
+          document.getElementById("acceptBat" + i).disabled = true;
+          document.getElementById("acceptBat" + i).style.opacity = "0.5";
+        }
+      }
+      
+      console.log(allTokens);
+      if (allTokens.includes(battles.p1CarId) || allTokens.includes(battles.p2CarId)) {
+        document.getElementById('battleView').style.opacity = "1";
+      } else {
+        document.getElementById('battleView').style.opacity = "0";
+      }
+
+      
+      
 
     }
   
