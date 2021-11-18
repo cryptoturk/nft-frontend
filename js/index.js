@@ -196,7 +196,7 @@ async function connectWeb3Account() {
         bscaddress = conn[0]
         document.getElementById('address').innerText = bscaddress;
       }
-
+      
       await switchNetwork()
     
       return true;
@@ -311,7 +311,7 @@ if (window.ethereum) {
       const chainidnetwork = await provider.request({
         method: 'eth_chainId'
       })
-      clearBattleDom();
+      
       if(chainidnetwork == "0x61") {
         if(accounts.length > 0) {
           bscaddress = accounts[0];
@@ -319,8 +319,10 @@ if (window.ethereum) {
           document.getElementById('address').innerHTML = bscaddress;
           updateMonster();
           getMonsterPower();
-          
+          clearBattleDom();
           updateBattles();
+        } else {
+          clearBattleDom();
         }
     
         if(!accounts.length) {
@@ -328,7 +330,7 @@ if (window.ethereum) {
           bscaddress = accounts[0];
           isNotConnected();
           updateMonster();
-          // clearBattleDom();
+          clearBattleDom();
           updateBattles();
           const Toast = Swal.mixin({
             toast: true,
@@ -880,15 +882,12 @@ async function updateBattles() {
         }
       }
       
-      console.log(allTokens);
+      // console.log(allTokens);
       if (allTokens.includes(battles.p1CarId) || allTokens.includes(battles.p2CarId)) {
         document.getElementById('battleView').style.opacity = "1";
       } else {
         document.getElementById('battleView').style.opacity = "0";
       }
-
-      
-      
 
     }
   
@@ -1198,9 +1197,99 @@ async function endBattle(battleId) {
   });
 }
 
+//Approve before battle wager 
 async function createBattle() {
+  if (window.ethereum) {
+    var contractWager = new web3.eth.Contract(wagerAbi, wagerContract);
+    const chainId = await ethereum.request({ method: 'eth_chainId' });
+    let account = await web3.eth.getAccounts();
+    if (account.length == 0 || chainId != 0x61) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Connection error',
+        text: `Please connect to Metamask and then switch to BSC mainnet.`,
+      })
+    } else {
+      let account = await web3.eth.getAccounts();
+    //check if approve method used before
+      const approval = await contractWager.methods.allowance(account[0], mainnetContract).call();
+      
+      if (approval > 0) {
+        createBattle2(1); //trigger create battle function
+      } else {
+        let account = await web3.eth.getAccounts();
+        const maxUint = 999999999999999999999999;
+        let amount = new BigNumber(maxUint).multipliedBy(new BigNumber(10).exponentiatedBy(18)).toString(10)
+
+        contractWager.methods.approve(mainnetContract, amount).send({ from: account[0] })
+          .on('transactionHash', function (hash) {
+            Swal.fire({
+              title: `Approve is needed one time. Payment authorization in process. Enter token ID and confirm deposit after authorization completed`,
+              showConfirmButton: false,
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              didOpen: () => {
+                Swal.showLoading()
+              }
+            })
+            console.log(`Payment authorization in process. ${hash}`)
+          })
+          .on('receipt', function (receipt) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Congrats',
+              text: `Payment authorization accepted. ${receipt.transactionHash}`,
+            })
+            console.log(`Payment authorization accepted. ${receipt.transactionHash}`);
+
+            createBattle2(1); //trigger create battle function
+          })
+          .on('error', function (error) {
+            if (error.code === 4001) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops',
+                text: 'User denied transaction signature',
+              })
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops',
+                text: error.message,
+              })
+            }
+            console.log(`Payment authorization failed. ${error?.message}`)
+          })
+          .catch((error) => {
+            console.log(`Payment authorization error. ${error?.message}`)
+          });
+      }
+    }
+  } else {
+    const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        
+    Toast.fire({
+      icon: 'warning',
+      title: 'No provider was found'
+    })
+    return;
+  }
+}
+
+async function createBattle2(payment) {
   let contract = await new web3.eth.Contract(mainnetAbi, mainnetContract);
   let account = await web3.eth.getAccounts();
+  const price = new BigNumber(payment).multipliedBy(1000000000000000000n);
 
   const { value: id } = await Swal.fire({
     input: 'text',
@@ -1209,48 +1298,61 @@ async function createBattle() {
   })
 
   if(id) {
-    contract.methods.createBattle(id).send({from: account[0]})
-    .on('transactionHash', function (hash) {
-      Swal.fire({
-        html: `<div class="swalCreateBattle"><img class="slide-fwd-center" src="${baseURI}${id}.png"><img src="assets/vs.png" height="50"><img class="slide-fwd-center" src="assets/qm.png"></div>`,
-        title: `Creating battle...`,
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        // didOpen: () => {
-        //   Swal.showLoading()
-        // }
-      })
-      console.log(`in process ${hash}`)
-    })
-    .on('receipt', function (receipt) {
-      Swal.fire({
-        icon: 'success',
-        title: 'You created battle. Check your battle on list',
-        text: `TX ID: ${receipt.transactionHash}`,
-      })
-      clearBattleDom();
-      updateBattles();
-      console.log(`completed. ${receipt.transactionHash}`)
-    })
-    .on('error', function (error) {
-      if (error.code === 4001) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops',
-          text: 'User denied transaction signature',
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You will deposit ${payment} BUSD`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, continue!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        contract.methods.createBattle(id).send({from: account[0]})
+        .on('transactionHash', function (hash) {
+          Swal.fire({
+            html: `<div class="swalCreateBattle"><img class="slide-fwd-center" src="${baseURI}${id}.png"><img src="assets/vs.png" height="50"><img class="slide-fwd-center" src="assets/qm.png"></div>`,
+            title: `Creating battle...`,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            // didOpen: () => {
+            //   Swal.showLoading()
+            // }
+          })
+          console.log(`in process ${hash}`)
         })
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops',
-          text: error.message,
+        .on('receipt', function (receipt) {
+          Swal.fire({
+            icon: 'success',
+            title: 'You created battle. Check your battle on list',
+            text: `TX ID: ${receipt.transactionHash}`,
+          })
+          clearBattleDom();
+          updateBattles();
+          console.log(`completed. ${receipt.transactionHash}`)
         })
+        .on('error', function (error) {
+          if (error.code === 4001) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops',
+              text: 'User denied transaction signature',
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops',
+              text: error.message,
+            })
+          }
+          console.log(`Failed. ${error?.message}`)
+        })
+        .catch(error => {
+          console.log(`Error. ${error?.message}`)
+        });
       }
-      console.log(`Failed. ${error?.message}`)
     })
-    .catch(error => {
-      console.log(`Error. ${error?.message}`)
-    });
+    
   }
 }
