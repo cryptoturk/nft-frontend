@@ -222,7 +222,7 @@ body {
   color: var(--seconderColor);
   background: 
         linear-gradient( 0deg, rgba(201, 216, 201, .3), rgba(201, 216, 209, .3) ), 
-        url(https://image.ibb.co/jKByZn/tile_bg_1.jpg); 
+        url("../assets/tile_bg_1.jpg"); 
   background-repeat: no-repeat;
   background-size: cover;
   border: 12px solid var(--seconderColor);
@@ -266,7 +266,7 @@ body {
   transform: translateX(-50%);
   background: 
         linear-gradient( 0deg, rgba(201, 216, 201, .3), rgba(201, 216, 209, .3) ), 
-        url(https://image.ibb.co/jKByZn/tile_bg_1.jpg);     
+        url("../assets/tile_bg_1.jpg");     
   margin-top: 10px;
   padding: 2px 0;
   color:black;
@@ -315,7 +315,7 @@ body {
   padding:5px;
   transform: translateX(-50%);
   background: #d3ded6;
-  background-image: url(https://image.ibb.co/dFcNx7/tile_bg_2.jpg);  
+  background-image: url("../assets/tile_bg_2.jpg");  
   font-size: 1rem;
   text-align:center;
   box-shadow: 
