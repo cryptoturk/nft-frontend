@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
 :root {
   --maincolor: #3c957f;
   --seconderColor: #48625c;
@@ -16,16 +17,9 @@ body {
   background-color: #1e1e1e;
   display: flex;
   flex-direction: column;
-  font-family: "courier new";
+  font-family: 'Marcellus', serif;
   /* height: 100%; */
-  /* background-image: url(../space3.png);
-  background-repeat: repeat;
-  animation: move-clouds-back 1000s linear infinite; */
 }
-/* @keyframes move-clouds-back {
-	from {background-position:0 0;}
-	to {background-position:10000px 0;}
-} */
 
 .banner-wrapper {
   display:block;
@@ -96,14 +90,82 @@ body {
 }
 
 .logo {
-  margin-top: 20px;
-  /* margin-bottom: 15px; */
+  min-height:calc(100vh - 60px);
+  width: 100%;
+  /* margin-top: 20px; */
   text-align: center;
+  padding-bottom: 30px;
+  background-image: url(../assets/space3.png);
+  background-repeat: repeat;
+  animation: move-clouds-back 1000s linear infinite;
 }
-.logo h2 {
+@keyframes move-clouds-back {
+	from {background-position:0 0;}
+	to {background-position:10000px 0;}
+}
+.logo #socialIcons {
+  margin-top: 20px;
+}
+.logo #socialIcons a{
+  display: inline-block;
+}
+.logo #socialIcons a:hover{
+  transform: scale(1.08);
+}
+.logo #socialIcons img{
+  width:50px;
+}
+.logo #logoCont {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(280px, 1fr) );
+  gap: 35px;
+}
+.logo h1 {
   color: var(--maincolor);
   font-weight: bold;
   font-size: 3rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.logo h2 {
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+.logo p {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1px solid var(--maincolor);
+  box-shadow: 0 0 1vw var(--maincolor);
+  padding: 40px 15px 20px;
+  /* max-width:350px; */
+  /* min-width:250px; */
+  position: relative;
+  background-color: rgba(0,0,0,0.6);
+  line-height: 1.5;
+  /* margin-bottom: 30px; */
+}
+.logo p:hover {
+  transform: scale(1.01);
+}
+.logo p span {
+  color:var(--maincolor);
+  font-weight: 700;
+}
+.logo p img {
+  width:50px;
+  position:absolute;
+  top:-20px;
+  right:10px;
+  border-radius: 50%;
+  border: 2px solid var(--maincolor);
+  box-shadow: 0 0 2vw var(--maincolor);
 }
 .mint-button {
   border-radius: 8px;
@@ -163,7 +225,9 @@ body {
   margin:0;
   text-align: center;
 }
-
+#mintContainerInfo {
+  width:80%;
+}
 .slide-container {
   display: flex;
   flex-direction: column;
@@ -316,7 +380,7 @@ body {
   transform: translateX(-50%);
   background: #d3ded6;
   background-image: url("../assets/tile_bg_2.jpg");  
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-align:center;
   box-shadow: 
         0 0 0 5px var(--seconderColor),
@@ -549,7 +613,7 @@ body {
   width: 90%;
   text-align: center;
   color: white;
-  padding: 10px;
+  padding: 10px 10px 20px;
   background-color: #373737;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -603,8 +667,8 @@ body {
   cursor:not-allowed;
 }
 #createBattleBtn, #createBattleBtn2, #battleList button {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.6rem;
+  font-family: 'Marcellus', serif;
+  font-size: 0.85rem;
   font-weight: bold;
   background-color: #cccccc;
   text-shadow: -1px -1px black, 1px 1px white;
