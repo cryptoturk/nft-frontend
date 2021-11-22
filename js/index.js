@@ -736,76 +736,89 @@ async function feed1(payment,feedFunc) {
   let contract = await new web3.eth.Contract(mainnetAbi, mainnetContract);
 
   const { value: id } = await Swal.fire({
-    input: 'text',
+    input: 'number',
     inputLabel: 'Enter the Token Id',
-    inputPlaceholder: '0'
+    inputPlaceholder: '0',
+    inputAttributes: {
+      min: 0,
+      max: 10000,
+    },
   })
   
   if (id) {
-    switch (feedFunc) {
-      case "feedMonsterWithFruit1":
-        var feedFunction = contract.methods.feedMonsterWithPotion1(id,price).send({from: account[0]})
-        break;
-      case "feedMonsterWithFruit2":
-        var feedFunction = contract.methods.feedMonsterWithPotion2(id,price).send({from: account[0]})
-        break;
-      case "feedMonsterWithFruit3":
-        var feedFunction = contract.methods.feedMonsterWithPotion3(id,price).send({from: account[0]})
-        break;
-      case "feedMonsterWithFruit4":
-        var feedFunction = contract.methods.feedMonsterWithPotion4(id,price).send({from: account[0]})
-        break;
-      case "feedMonsterWithFruit5":
-        var feedFunction = contract.methods.feedMonsterWithPotion5(id,price).send({from: account[0]})
-        break;
-      case "feedMonsterWithFruit6":
-        var feedFunction = contract.methods.feedMonsterWithPotion6(id,price).send({from: account[0]})
-        break;
-    
-      default:
-        break;
-    }
-    feedFunction.on('transactionHash', function (hash) {
-        Swal.fire({
-          title: `Your ${NFTNAME} is drinking...`,
-          showConfirmButton: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          didOpen: () => {
-            Swal.showLoading()
+    const ownerCheck = await contract.methods.ownerOf(id).call();
+    if(ownerCheck == account[0]) {
+      switch (feedFunc) {
+        case "feedMonsterWithFruit1":
+          var feedFunction = contract.methods.feedMonsterWithPotion1(id,price).send({from: account[0]})
+          break;
+        case "feedMonsterWithFruit2":
+          var feedFunction = contract.methods.feedMonsterWithPotion2(id,price).send({from: account[0]})
+          break;
+        case "feedMonsterWithFruit3":
+          var feedFunction = contract.methods.feedMonsterWithPotion3(id,price).send({from: account[0]})
+          break;
+        case "feedMonsterWithFruit4":
+          var feedFunction = contract.methods.feedMonsterWithPotion4(id,price).send({from: account[0]})
+          break;
+        case "feedMonsterWithFruit5":
+          var feedFunction = contract.methods.feedMonsterWithPotion5(id,price).send({from: account[0]})
+          break;
+        case "feedMonsterWithFruit6":
+          var feedFunction = contract.methods.feedMonsterWithPotion6(id,price).send({from: account[0]})
+          break;
+      
+        default:
+          break;
+      }
+      feedFunction.on('transactionHash', function (hash) {
+          Swal.fire({
+            title: `Your ${NFTNAME} is drinking...`,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+              Swal.showLoading()
+            }
+          })
+          console.log(`in process ${hash}`)
+        })
+        .on('receipt', function (receipt) {
+          Swal.fire({
+            icon: 'success',
+            title: `${NFTNAME} Improved`,
+            text: `TX ID: ${receipt.transactionHash}`,
+          })
+          updateMonster();
+          getMonsterPower();
+          console.log(`completed. ${receipt.transactionHash}`)
+        })
+        .on('error', function (error) {
+          if (error.code === 4001) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops',
+              text: 'User denied transaction signature',
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops',
+              text: error.message,
+            })
           }
+          console.log(`Deposit failed. ${error?.message}`)
         })
-        console.log(`in process ${hash}`)
+        .catch(error => {
+          console.log(`Deposit error. ${error?.message}`)
+        });
+    }else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'You are not owner of this NFT',
       })
-      .on('receipt', function (receipt) {
-        Swal.fire({
-          icon: 'success',
-          title: `${NFTNAME} Improved`,
-          text: `TX ID: ${receipt.transactionHash}`,
-        })
-        updateMonster();
-        getMonsterPower();
-        console.log(`completed. ${receipt.transactionHash}`)
-      })
-      .on('error', function (error) {
-        if (error.code === 4001) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops',
-            text: 'User denied transaction signature',
-          })
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops',
-            text: error.message,
-          })
-        }
-        console.log(`Deposit failed. ${error?.message}`)
-      })
-      .catch(error => {
-        console.log(`Deposit error. ${error?.message}`)
-      });
+    }
   } 
 }
 
@@ -989,264 +1002,286 @@ async function acceptBattle(battleId) {
 }
 
 async function acceptBattle2(battleId) {
-  console.log(battleId);
   let contract = await new web3.eth.Contract(mainnetAbi, mainnetContract);
   let account = await web3.eth.getAccounts();
   const { value: id } = await Swal.fire({
-    input: 'text',
+    input: 'number',
     inputLabel: 'Enter the Token Id',
-    inputPlaceholder: '0'
+    inputPlaceholder: '0',
+    inputAttributes: {
+      min: 0,
+      max: 10000,
+    },
   })
   if(id) {
-    console.log(account[0]);
-    Swal.fire({
-      title: 'Are you sure?',
-      text: `You will deposit ${wagerPrice} ${wagerToken}`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, continue!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        contract.methods.acceptBattle(battleId,id).send({from: account[0]})
-        .on('transactionHash', async function (hash) {
-          const battles = await contract.methods.battles(battleId).call();
-          const p1 = battles.p1CarId;
-          Swal.fire({
-            html:`<div id="animationContainer">
-                    <div id="innerR">
-                      <img src="${baseURI}${p1}.png">
-                    </div>
-                    <img src="assets/vs.png" id="merger">
-                    <div id="innerL">
-                      <img src="${baseURI}${id}.png">
-                    </div>
-                  </div>
-                  <div id="animation">
-                    <img src="assets/fight-cartoon.gif">
-                  </div>`,
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            
-          })
-          
-          document.getElementById('innerR').style.flex = "1";
-          document.getElementById('innerL').style.flex = "1";
-          document.getElementById('innerR').style.justifyContent = "flex-end";
-          document.getElementById('innerL').style.justifyContent = "flex-start";
-          document.getElementById('merger').style.transform = "scale(1.5)";
-          var element = document.getElementById("animationContainer");
-          element.classList.add("flashlight");
-          
-          setTimeout(()=>{ 
-              audioPunches.play();
-              document.getElementById("animationContainer").style.display = "none";
-              document.getElementById("animation").style.display = "flex";
-          }, 2000);
-          console.log(`in process ${hash}`)
-        })
-        .on('receipt', async function (receipt) {
-          audioPunches.pause();
-          audioPunches.currentTime = 0;
-          const battles = await contract.methods.battles(battleId).call();
-          const winner = battles.winnerId;
-          const p1 = battles.p1CarId;
-
-          if(winner == id) {
-            Swal.fire({
-              // icon: 'success',
-              // title: 'You won',
-              // text: `TX ID: ${receipt.transactionHash}`,
-              html:`<div id="WanimationContainer">
-                      <div id="tsparticles"></div>
-                      <div id="WinnerR">
-                        <img src="${baseURI}${p1}.png">
+    const ownerCheck = await contract.methods.ownerOf(id).call();
+    if(ownerCheck == account[0]) {
+      const levelCheck = await contract.methods.battles(battleId).call();
+      const monsterPowerForLevel = await window.contract.methods.getMonsterPower(id).call();
+      if (levelCheck.levels == monsterPowerForLevel[0]) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: `You will deposit ${wagerPrice} ${wagerToken}`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, continue!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            contract.methods.acceptBattle(battleId,id).send({from: account[0]})
+            .on('transactionHash', async function (hash) {
+              const battles = await contract.methods.battles(battleId).call();
+              const p1 = battles.p1CarId;
+              Swal.fire({
+                html:`<div id="animationContainer">
+                        <div id="innerR">
+                          <img src="${baseURI}${p1}.png">
+                        </div>
+                        <img src="assets/vs.png" id="merger">
+                        <div id="innerL">
+                          <img src="${baseURI}${id}.png">
+                        </div>
                       </div>
-                      <img src="assets/vs.png" id="Wmerger">
-                      <div id="WinnerL">
-                        <img src="${baseURI}${id}.png">
-                      </div>
-                    </div>`,
+                      <div id="animation">
+                        <img src="assets/fight-cartoon.gif">
+                      </div>`,
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                
+              })
+              
+              document.getElementById('innerR').style.flex = "1";
+              document.getElementById('innerL').style.flex = "1";
+              document.getElementById('innerR').style.justifyContent = "flex-end";
+              document.getElementById('innerL').style.justifyContent = "flex-start";
+              document.getElementById('merger').style.transform = "scale(1.5)";
+              var element = document.getElementById("animationContainer");
+              element.classList.add("flashlight");
+              
+              setTimeout(()=>{ 
+                  audioPunches.play();
+                  document.getElementById("animationContainer").style.display = "none";
+                  document.getElementById("animation").style.display = "flex";
+              }, 2000);
+              console.log(`in process ${hash}`)
             })
-            
-            
-            var element = document.getElementById("WanimationContainer");
-            element.classList.add("Wflashlight");
-
-            setTimeout(() => {
-              document.getElementById("Wmerger").style.transform = "scale(0)";
-              setTimeout(() => {
-                audioWin.play();
-                document.getElementById("WinnerR").style.transform = "scale(0)";
+            .on('receipt', async function (receipt) {
+              audioPunches.pause();
+              audioPunches.currentTime = 0;
+              const battles = await contract.methods.battles(battleId).call();
+              const winner = battles.winnerId;
+              const p1 = battles.p1CarId;
+    
+              if(winner == id) {
+                Swal.fire({
+                  // icon: 'success',
+                  // title: 'You won',
+                  // text: `TX ID: ${receipt.transactionHash}`,
+                  html:`<div id="WanimationContainer">
+                          <div id="tsparticles"></div>
+                          <div id="WinnerR">
+                            <img src="${baseURI}${p1}.png">
+                          </div>
+                          <img src="assets/vs.png" id="Wmerger">
+                          <div id="WinnerL">
+                            <img src="${baseURI}${id}.png">
+                          </div>
+                        </div>`,
+                })
+                
+                
+                var element = document.getElementById("WanimationContainer");
+                element.classList.add("Wflashlight");
+    
                 setTimeout(() => {
-                  document.getElementById("WinnerR").style.display = "none";
+                  document.getElementById("Wmerger").style.transform = "scale(0)";
                   setTimeout(() => {
-                    document.getElementById("WinnerL").style.transform = "scale(1.5)";
-                    audioConfetti.play();
-                    tsParticles.load("tsparticles", {
-                      fpsLimit: 60,
-                      particles: {
-                        number: {
-                          value: 200
-                        },
-                        color: {
-                          value: ["#9146FF", "#FFAAA8", "#8FFFD2", "#FFD37A", "#FF38DB"]
-                        },
-                        shape: {
-                          type: "confetti",
-                          options: {
-                            confetti: {
-                              type: ["circle", "square"]
-                            }
-                          }
-                        },
-                        opacity: {
-                          value: 1,
-                          animation: {
-                            enable: true,
-                            minimumValue: 0,
-                            speed: 2,
-                            startValue: "max",
-                            destroy: "min"
-                          }
-                        },
-                        size: {
-                          value: 7,
-                          random: {
-                            enable: true,
-                            minimumValue: 3
-                          }
-                        },
-                        links: {
-                          enable: false
-                        },
-                        life: {
-                          duration: {
-                            sync: true,
-                            value: 5
-                          },
-                          count: 1
-                        },
-                        move: {
-                          enable: true,
-                          gravity: {
-                            enable: true,
-                            acceleration: 20
-                          },
-                          speed: 50,
-                          decay: 0.1,
-                          direction: "none",
-                          random: false,
-                          straight: false,
-                          outModes: {
-                            default: "destroy",
-                            top: "none"
-                          }
-                        }
-                      },
-                      interactivity: {
-                        detectsOn: "canvas",
-                        events: {
-                          resize: true
-                        }
-                      },
-                      detectRetina: true,
-                      background: {
-                        color: "#fff"
-                      },
-                      emitters: [
-                        {
-                          direction: "top-left",
-                          rate: {
-                            delay: 0.1,
-                            quantity: 0.25
-                          },
-                          position: {
-                            x: 100,
-                            y: 50
-                          },
-                          size: {
-                            width: 0,
-                            height: 0
-                          },
+                    audioWin.play();
+                    document.getElementById("WinnerR").style.transform = "scale(0)";
+                    setTimeout(() => {
+                      document.getElementById("WinnerR").style.display = "none";
+                      setTimeout(() => {
+                        document.getElementById("WinnerL").style.transform = "scale(1.5)";
+                        audioConfetti.play();
+                        tsParticles.load("tsparticles", {
+                          fpsLimit: 60,
                           particles: {
+                            number: {
+                              value: 200
+                            },
+                            color: {
+                              value: ["#9146FF", "#FFAAA8", "#8FFFD2", "#FFD37A", "#FF38DB"]
+                            },
+                            shape: {
+                              type: "confetti",
+                              options: {
+                                confetti: {
+                                  type: ["circle", "square"]
+                                }
+                              }
+                            },
+                            opacity: {
+                              value: 1,
+                              animation: {
+                                enable: true,
+                                minimumValue: 0,
+                                speed: 2,
+                                startValue: "max",
+                                destroy: "min"
+                              }
+                            },
+                            size: {
+                              value: 7,
+                              random: {
+                                enable: true,
+                                minimumValue: 3
+                              }
+                            },
+                            links: {
+                              enable: false
+                            },
+                            life: {
+                              duration: {
+                                sync: true,
+                                value: 5
+                              },
+                              count: 1
+                            },
                             move: {
-                              angle: {
-                                offset: 30,
-                                value: 45
+                              enable: true,
+                              gravity: {
+                                enable: true,
+                                acceleration: 20
+                              },
+                              speed: 50,
+                              decay: 0.1,
+                              direction: "none",
+                              random: false,
+                              straight: false,
+                              outModes: {
+                                default: "destroy",
+                                top: "none"
                               }
                             }
-                          }
-                        }
-                      ]
-                    });
-                  }, 500);
-                }, 1000);
-              }, 1000);
-            }, 500);
-          } else {
-            Swal.fire({
-              // icon: 'error',
-              // title: 'You lost',
-              // text: `TX ID: ${receipt.transactionHash}`,
-              html:`<div id="WanimationContainer">
-                      <div id="WinnerR">
-                        <img src="${baseURI}${p1}.png">
-                      </div>
-                      <img src="assets/vs.png" id="Wmerger">
-                      <div id="WinnerL">
-                        <img src="${baseURI}${id}.png">
-                      </div>
-                    </div>`,
-            })
-            
-            
-            var element = document.getElementById("WanimationContainer");
-            element.classList.add("Wflashlight");
-
-            setTimeout(() => {
-              document.getElementById("Wmerger").style.transform = "scale(0)";
-              setTimeout(() => {
-                audioLose.play();
-                document.getElementById("WinnerR").style.transform = "scale(0)";
+                          },
+                          interactivity: {
+                            detectsOn: "canvas",
+                            events: {
+                              resize: true
+                            }
+                          },
+                          detectRetina: true,
+                          background: {
+                            color: "#fff"
+                          },
+                          emitters: [
+                            {
+                              direction: "top-left",
+                              rate: {
+                                delay: 0.1,
+                                quantity: 0.25
+                              },
+                              position: {
+                                x: 100,
+                                y: 50
+                              },
+                              size: {
+                                width: 0,
+                                height: 0
+                              },
+                              particles: {
+                                move: {
+                                  angle: {
+                                    offset: 30,
+                                    value: 45
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        });
+                      }, 500);
+                    }, 1000);
+                  }, 1000);
+                }, 500);
+              } else {
+                Swal.fire({
+                  // icon: 'error',
+                  // title: 'You lost',
+                  // text: `TX ID: ${receipt.transactionHash}`,
+                  html:`<div id="WanimationContainer">
+                          <div id="WinnerR">
+                            <img src="${baseURI}${p1}.png">
+                          </div>
+                          <img src="assets/vs.png" id="Wmerger">
+                          <div id="WinnerL">
+                            <img src="${baseURI}${id}.png">
+                          </div>
+                        </div>`,
+                })
+                
+                
+                var element = document.getElementById("WanimationContainer");
+                element.classList.add("Wflashlight");
+    
                 setTimeout(() => {
-                  document.getElementById("WinnerR").style.display = "none";
+                  document.getElementById("Wmerger").style.transform = "scale(0)";
                   setTimeout(() => {
-                    audioWawa.play();
-                    document.getElementById("WinnerL").style.transform = "scale(1.5)";
-                  }, 500);
-                }, 1000);
-              }, 1000);
-            }, 500);
-          }
-          
-          clearBattleDom();
-          updateBattles();
-          console.log(`completed. ${receipt.transactionHash}`)
-        })
-        .on('error', function (error) {
-          if (error.code === 4001) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops',
-              text: 'User denied transaction signature',
+                    audioLose.play();
+                    document.getElementById("WinnerR").style.transform = "scale(0)";
+                    setTimeout(() => {
+                      document.getElementById("WinnerR").style.display = "none";
+                      setTimeout(() => {
+                        audioWawa.play();
+                        document.getElementById("WinnerL").style.transform = "scale(1.5)";
+                      }, 500);
+                    }, 1000);
+                  }, 1000);
+                }, 500);
+              }
+              
+              clearBattleDom();
+              updateBattles();
+              console.log(`completed. ${receipt.transactionHash}`)
             })
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops',
-              text: error.message,
+            .on('error', function (error) {
+              if (error.code === 4001) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops',
+                  text: 'User denied transaction signature',
+                })
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops',
+                  text: error.message,
+                })
+              }
+              console.log(`Failed. ${error?.message}`)
             })
+            .catch(error => {
+              console.log(`Error. ${error?.message}`)
+            });
           }
-          console.log(`Failed. ${error?.message}`)
-        })
-        .catch(error => {
-          console.log(`Error. ${error?.message}`)
         });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Levels not match',
+        })
       }
-    });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'You are not owner of this NFT',
+      })
+    }
+
   }
 }
 
@@ -1397,64 +1432,76 @@ async function createBattle2(payment) {
   // const price = new BigNumber(payment).multipliedBy(1000000000000000000n);
 
   const { value: id } = await Swal.fire({
-    input: 'text',
+    input: 'number',
     inputLabel: 'Enter the Token Id',
-    inputPlaceholder: '0'
+    inputPlaceholder: '0',
+    inputAttributes: {
+      min: 0,
+      max: 10000,
+    },
   })
 
   if(id) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: `You will deposit ${payment} ${wagerToken}`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, continue!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        contract.methods.createBattle(id).send({from: account[0]})
-        .on('transactionHash', function (hash) {
-          Swal.fire({
-            html: `<div class="swalCreateBattle"><img class="slide-fwd-center" src="${baseURI}${id}.png"><img src="assets/vs.png" height="50"><img class="slide-fwd-center" src="assets/qm.png"></div>`,
-            title: `Creating battle...`,
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-          })
-          console.log(`in process ${hash}`)
-        })
-        .on('receipt', function (receipt) {
-          Swal.fire({
-            icon: 'success',
-            title: 'You created battle. Check your battle on list',
-            text: `TX ID: ${receipt.transactionHash}`,
-          })
-          clearBattleDom();
-          updateBattles();
-          console.log(`completed. ${receipt.transactionHash}`)
-        })
-        .on('error', function (error) {
-          if (error.code === 4001) {
+    const ownerCheck = await contract.methods.ownerOf(id).call();
+    if(ownerCheck == account[0]) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `You will deposit ${payment} ${wagerToken}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, continue!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          contract.methods.createBattle(id).send({from: account[0]})
+          .on('transactionHash', function (hash) {
             Swal.fire({
-              icon: 'error',
-              title: 'Oops',
-              text: 'User denied transaction signature',
+              html: `<div class="swalCreateBattle"><img class="slide-fwd-center" src="${baseURI}${id}.png"><img src="assets/vs.png" height="50"><img class="slide-fwd-center" src="assets/qm.png"></div>`,
+              title: `Creating battle...`,
+              showConfirmButton: false,
+              allowOutsideClick: false,
+              allowEscapeKey: false,
             })
-          } else {
+            console.log(`in process ${hash}`)
+          })
+          .on('receipt', function (receipt) {
             Swal.fire({
-              icon: 'error',
-              title: 'Oops',
-              text: error.message,
+              icon: 'success',
+              title: 'You created battle. Check your battle on list',
+              text: `TX ID: ${receipt.transactionHash}`,
             })
-          }
-          console.log(`Failed. ${error?.message}`)
-        })
-        .catch(error => {
-          console.log(`Error. ${error?.message}`)
-        });
-      }
-    })
-    
+            clearBattleDom();
+            updateBattles();
+            console.log(`completed. ${receipt.transactionHash}`)
+          })
+          .on('error', function (error) {
+            if (error.code === 4001) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops',
+                text: 'User denied transaction signature',
+              })
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops',
+                text: error.message,
+              })
+            }
+            console.log(`Failed. ${error?.message}`)
+          })
+          .catch(error => {
+            console.log(`Error. ${error?.message}`)
+          });
+        }
+      })
+    }else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'You are not owner of this NFT',
+      })
+    }
   }
 }
