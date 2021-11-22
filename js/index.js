@@ -592,6 +592,7 @@ async function getMonsterPower() {
       document.getElementById('battleContainer').style.maxHeight  = "500px";
       for (let index = 0; index < allTokens.length; index++) {
       const monsterPower = await window.contract.methods.getMonsterPower(allTokens[index]).call();
+      const monsterRecord = await window.contract.methods.getMonsterBattleRecord(allTokens[index]).call();
       var tokenDiv = document.createElement('div');
       tokenDiv.setAttribute("id", "token" + index);
 
@@ -605,22 +606,23 @@ async function getMonsterPower() {
         <p class="status" id="status${index}"></p>
       </div>
       <p class="frame-type-line">
-        <span id="tokenName${index}">${monsterPower[0]}</span>
+        <span id="tokenName${index}">${monsterPower[1]}</span>
         <svg class="heart" width="20" height="20" viewBox="0 0 32 29.6">
           <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z" />
-          <text id="health${index}" x="50%" y="50%" fill="white" dominant-baseline="middle" text-anchor="middle">${monsterPower[3]}</text>
+          <text id="health${index}" x="50%" y="50%" fill="white" dominant-baseline="middle" text-anchor="middle">${monsterPower[2]}</text>
         </svg>
       </p>
       <div class="frame-text-box">
-        <p>Wins: <span id="winnings${index}">${monsterPower[1]}</span></p>
-        <p>Losses: <span id="losings${index}">${monsterPower[2]}</span></p>
-        <p>Attack: <span id="attackP${index}">${monsterPower[4]}</span></p>
-        <p>Defence: <span id="defenceP${index}">${monsterPower[5]}</span></p>
-        <p>Speed: <span id="speedP${index}">${monsterPower[6]}</span></p>
+        <p>Wins: <span id="winnings${index}">${monsterRecord[0]}</span></p>
+        <p>Losses: <span id="losings${index}">${monsterRecord[1]}</span></p>
+        <p>Attack: <span id="attackP${index}">${monsterPower[3]}</span></p>
+        <p>Defence: <span id="defenceP${index}">${monsterPower[4]}</span></p>
+        <p>Speed: <span id="speedP${index}">${monsterPower[5]}</span></p>
+        <p>Level: <span id="levelP${index}">${monsterPower[0]}</span></p>
       </div>`
       
 
-        if(monsterPower[5] < monsterPower[4]) {
+        if(monsterPower[4] < monsterPower[3]) {
           document.getElementById('status' + index).innerHTML='<img src="assets/attacker.png">';
           // document.querySelector(":root").style.setProperty('--seconderColor', '#7c7c7c');
 
@@ -742,22 +744,22 @@ async function feed1(payment,feedFunc) {
   if (id) {
     switch (feedFunc) {
       case "feedMonsterWithFruit1":
-        var feedFunction = contract.methods.feedMonsterWithFruit1(id,price).send({from: account[0]})
+        var feedFunction = contract.methods.feedMonsterWithPotion1(id,price).send({from: account[0]})
         break;
       case "feedMonsterWithFruit2":
-        var feedFunction = contract.methods.feedMonsterWithFruit2(id,price).send({from: account[0]})
+        var feedFunction = contract.methods.feedMonsterWithPotion2(id,price).send({from: account[0]})
         break;
       case "feedMonsterWithFruit3":
-        var feedFunction = contract.methods.feedMonsterWithFruit3(id,price).send({from: account[0]})
+        var feedFunction = contract.methods.feedMonsterWithPotion3(id,price).send({from: account[0]})
         break;
       case "feedMonsterWithFruit4":
-        var feedFunction = contract.methods.feedMonsterWithFruit4(id,price).send({from: account[0]})
+        var feedFunction = contract.methods.feedMonsterWithPotion4(id,price).send({from: account[0]})
         break;
       case "feedMonsterWithFruit5":
-        var feedFunction = contract.methods.feedMonsterWithFruit5(id,price).send({from: account[0]})
+        var feedFunction = contract.methods.feedMonsterWithPotion5(id,price).send({from: account[0]})
         break;
       case "feedMonsterWithFruit6":
-        var feedFunction = contract.methods.feedMonsterWithFruit6(id,price).send({from: account[0]})
+        var feedFunction = contract.methods.feedMonsterWithPotion6(id,price).send({from: account[0]})
         break;
     
       default:
@@ -849,11 +851,12 @@ async function updateBattles() {
       document.getElementById("battle" + i).innerHTML = `
           <span id='battleView' style="width:10px;height:10px;border-radius:50%;position:relative;left:5px;background:#0bc214"></span>
           <td style="width:10%">${i}</td>
+          <td style="width:10%">${battles.levels}</td>
           <td style="width:10%" id ="endedBat${i}">${battles.ended}</td>
           <td style="width:10%" id ="winnerBat${i}">${battles.winnerId}</td>
           <td style="width:25%;display: flex; align-items: center; justify-content: center;" id ="warBat${i}"><img src="${baseURI}${battles.p1CarId}.png"><img src="assets/vs.png"><img src="${baseURI}${battles.p2CarId}.png"></td>
-          <td style="width:22.5%"><button id ="acceptBat${i}" onclick="acceptBattle(${i});">Accept Battle</button></td>
-          <td style="width:22.5%"><button id ="endBat${i}" onClick="endBattle(${i});">Upgrade ${NFTNAME}</button></td>`
+          <td style="width:17.5%"><button id ="acceptBat${i}" onclick="acceptBattle(${i});">Accept Battle</button></td>
+          <td style="width:17.5%"><button id ="endBat${i}" onClick="endBattle(${i});">Upgrade ${NFTNAME}</button></td>`
 
       if(battles.ended == 2) {
         document.getElementById("endedBat" + i).innerText = "Ended";
