@@ -42,32 +42,43 @@
 
     <div class="logo">
       <h1>ZAIGAR WARRIORS</h1>
-      <h2>Collect, Feed, Play, Earn, Trade</h2>
       
-      <div id="logoCont">
-        <p>
-          <span style="display:block">Mint-2-Play</span>
-          Zaigar Warriors, collection of 10,000 unique algorithmically generated warrior NFTs, is a game centered around cryptographically unique collectible warriors on the Binance Smart Chain that used for collectors to battle each other. Make them battle and earn! Warriors have four attributes which help them in battle: Attack Power, Defence Power, Speed and Health. The award for winning a battle is a ZFAI token and improved attributes.
-          <img src="assets/warriorIcon.jpg" style="border-radius: 50%;" alt="">
-        </p>
-        <p>
-          <span style="display:block">Feed-2-Win</span>
-          As you win battles, NFT's attribute powers increase. But there is another way for you. You can feed your Zaigar Warrios and this helps you win battles. Feeding increases health, attack and defence power of the NFT warrior. There are 6 types of potions; Vitamix, Polyjuice, Caxambu, Everklena, Manegro and Amortentia. Strengthen Warriors means winning more battle, earning more ZFAI token and selling your NFT at higher price at marketplaces.
-          <img src="assets/potionIcon.jpg" style="border-radius: 50%;" alt="">
-        </p>
-        <p>
-          <span style="display:block">Play-2-Earn</span>
-          This is a system that involves two players, who wager ZFAI token on the outcome of an NFT fight. Once entered the game, players will need to choose a warrior to play for the round. Battle creator and acceptor puts 1,000 ZFAI token as wager. The smart contract decides winner of the battle. Winner of the battle need to claim the wager x 2. Moreover, the powers of the warriors winner has are improved to win the further battles.
-          <img src="assets/battle.png" alt="">
-        </p>
+      <div class="landing">
+        
+        <div>
+          <h2>Collect, Feed, Play, Earn, Trade</h2>
+          <p>Zaigar Warriors, collection of 10,000 unique algorithmically generated NFTs collectible on the Binance Smart Chain that used for collectors to battle each other. Make them battle and earn! Warriors have four attributes which help them in battle: Attack Power, Defence Power, Speed and Health. </p>
+        </div>
+        <img src="assets/landing.gif" alt="">
       </div>
 
       <div id="socialIcons">
         <a href=""><img src="assets/discord.png" alt=""></a>
         <a href=""><img src="assets/twitter.png" alt=""></a>
-        <a href=""><img src="assets/telegram.png" alt=""></a>
+        <a href="https://t.me/ZaigarWarriors"><img src="assets/telegram.png" alt=""></a>
+      </div>
+
+    </div>
+
+    <div id="battleRulesCont">
+      <h2>Battle Rules</h2>
+      
+      <div class="battleRules">
+        <p>
+          <span style="display:block;background-color: #0c0c0c; text-align: center;width: 50px; height: 50px; line-height: 50px; margin-left: auto; margin-right: auto; border-radius: 50%; position: relative; top: -25px;border: 2px solid var(--maincolor); box-shadow: 0 0 2vw var(--maincolor);">1</span>
+          You must have at least one Zaigar Warriors NFT to create or accept battle. Each warrior has a genome, aka "attack power", "defense power", "speed" and "health". When you mint your NFT, your initial "health" stat is "10", decreasing by one each time you lose a battle. Other stats are determined by your attributes and rarity. To participate in the battle, your "health" stat must be greater than zero. If your health stat is zero, you should feed your warriors with potions to increase health stat. The other way is to mint new NFT.
+        </p>
+        <p>
+          <span style="display:block;background-color: #0c0c0c; width: 50px; text-align: center;height: 50px; line-height: 50px; margin-left: auto; margin-right: auto; border-radius: 50%; position: relative; top: -25px;border: 2px solid var(--maincolor); box-shadow: 0 0 2vw var(--maincolor);">2</span>
+          The outcome of Zaigar Warrior battling is depend on the warrior genome. Those who create the battle should be the "Attacker", those who accept the battle should be the "Defender". If your attack power and speed are higher than your opponent's defense power and speed, you win the battle. While the losing opponent's health stats and one of the other stats randomly decreasing, attack or defense power and speed of winner increases. Remember, neither side will know the strength of the other while battling.
+        </p>
+        <p>
+          <span style="display:block;background-color: #0c0c0c; width: 50px; text-align: center;height: 50px; line-height: 50px; margin-left: auto; margin-right: auto; border-radius: 50%; position: relative; top: -25px;border: 2px solid var(--maincolor); box-shadow: 0 0 2vw var(--maincolor);">3</span>
+          The system involves two players, who wager ZFAI token on the outcome of an NFT battle. To join the battle, you must be on the same level as the NFT that created the war. If his level is 2, your level should be 2. Otherwise the system won't let you battle. Once entered the game, players will need to choose a warrior to play for the round. Battle creator and acceptor puts 1,000 ZFAI token as wager. The smart contract decides winner of the battle. Winner of the battle need to claim the wager x 2. 
+        </p>
       </div>
     </div>
+
 
     <div id="web3-wrapper">
       <div id="wrapper">
@@ -79,9 +90,9 @@
         </button>
         <div id="mintContainer">
           <div class="slide-info-container">
-            <p id="haremsMintInfo" style="margin-bottom: 10px;">Each ZAIGAR WARRIOR costs 0.03BNB + Gas.</p>
+            <p id="haremsMintInfo" style="margin-bottom: 10px;">Each ZAIGAR WARRIOR costs 0.1 BNB + Gas.</p>
           </div>
-          <p id="mintContainerInfo">Each warrior is unique, some are more rare then others. Weapons, skin color, clothes & stats - everything will be specific to your warrior. Mint for having one warrior, collect them and play to earn.</p>          
+          <p id="mintContainerInfo">Own one of 10,000 unique Zaigar Warriors (ZW). Each of these NFTs has attributes that make them unique according to a defined rarity system. You can mint as many ZW as you want but once the 10,000 Zaigar Warriors are sold, it will be too late to get one at mint cost. However, dont worry, you will able to buy and sell at NFT marketplaces.</p>          
           <div id="slide-container-for-class" class="slide-container">
             <span id="krakenName">WARRIOR name: </span>
             <input type="text" autocomplete="off" id="_name" minlength="5" maxlength="15" onkeyup="this.value=this.value.replace(/[^a-zA-Z0-9]/g, '')">
@@ -116,7 +127,7 @@
         <div id="generalPotionContainer">
           <div id="potionEmpty">You have 0 ZAIGAR WARRIOR. Mint your first ZAIGAR WARRIOR and then you can upgrade it</div>
           <div id="potionContainer">
-            <p>Feed your ZAIGAR WARRIOR to improve them. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Odio commodi facilis earum, fuga quos pariatur corporis sint rerum doloribus cum, nisi labore rem minus hic, dolorum iusto? Deleniti, consectetur qui.</p>
+            <p>Feed your ZAIGAR WARRIOR to improve them.</p>
             <div id="potionList">
               <div class="potion">
                 <div class="ribbon ribbon-top-right"><span>Vitamix</span></div>
@@ -124,7 +135,7 @@
                 <ul>
                   <li>+1 Health</li>
                 </ul>
-                <button id="feed1" onclick="feed(1000,'feedMonsterWithFruit1')">
+                <button id="feed1" onclick="feed(PPRICET1,'feedMonsterWithFruit1')">
                   <img src="https://zaigar.finance/images/zai/92.png" alt="">
                   <span>1000 ZAIF</span>
                 </button>
@@ -135,7 +146,7 @@
                 <ul>
                   <li>+2 Health</li>
                 </ul>
-                <button id="feed2" onclick="feed(1500,'feedMonsterWithFruit2')">
+                <button id="feed2" onclick="feed(PPRICET2,'feedMonsterWithFruit2')">
                   <img src="https://zaigar.finance/images/zai/92.png" alt="">
                   <span>1500 ZAIF</span>
                 </button>
@@ -147,7 +158,7 @@
                   <li>+2 Health</li>
                   <li>+4 Attack Power</li>
                 </ul>
-                <button id="feed3" onclick="feed(2000,'feedMonsterWithFruit3')">
+                <button id="feed3" onclick="feed(PPRICET3,'feedMonsterWithFruit3')">
                   <img src="https://zaigar.finance/images/zai/92.png" alt="">
                   <span>2000 ZAIF</span>
                 </button>
@@ -156,12 +167,12 @@
                 <div class="ribbon ribbon-top-right"><span>Everklena</span></div>
                 <img src="assets/potion4.png" alt="">
                 <ul>
-                  <li>+3 Health</li>
-                  <li>+4 Attack Power</li>
+                  <li>+2 Health</li>
+                  <li>+4 Defence Power</li>
                 </ul>
-                <button id="feed4" onclick="feed(2500,'feedMonsterWithFruit4')">
+                <button id="feed4" onclick="feed(PPRICET3,'feedMonsterWithFruit4')">
                   <img src="https://zaigar.finance/images/zai/92.png" alt="">
-                  <span>2500 ZAIF</span>
+                  <span>2000 ZAIF</span>
                 </button>
               </div>
               <div class="potion">
@@ -172,7 +183,7 @@
                   <li>+4 Attack Power</li>
                   <li>+2 Defence Power</li>
                 </ul>
-                <button id="feed5" onclick="feed(3000,'feedMonsterWithFruit5')">
+                <button id="feed5" onclick="feed(PPRICET4,'feedMonsterWithFruit5')">
                   <img src="https://zaigar.finance/images/zai/92.png" alt="">
                   <span>3000 ZAIF</span>
                 </button>
@@ -182,12 +193,12 @@
                 <img src="assets/potion6.png" alt="">
                 <ul>
                   <li>+3 Health</li>
-                  <li>+4 Attack Power</li>
                   <li>+4 Defence Power</li>
+                  <li>+4 Attack Power</li>
                 </ul>
-                <button id="feed6" onclick="feed(3500,'feedMonsterWithFruit6')">
+                <button id="feed6" onclick="feed(PPRICET4,'feedMonsterWithFruit6')">
                   <img src="https://zaigar.finance/images/zai/92.png" alt="">
-                  <span>3500 ZAIF</span>
+                  <span>3000 ZAIF</span>
                 </button>
               </div>
             </div>
@@ -212,13 +223,14 @@
             
             <div id="battleTableContainer">
               <table style="width:100%;min-width:774px;">
-                <tr>
+                <tr style="display: flex; align-items: center; padding-left: 10px;">
                   <th style="width:10%">Battle Id</th>
+                  <th style="width:10%">Level</th>
                   <th style="width:10%">Status</th>
                   <th style="width:10%">Winner Id</th>
-                  <th style="width:25%"></th>
-                  <th style="width:22.5%"></th>
-                  <th style="display: flex;align-items: center;justify-content: flex-end;margin-bottom: 10px;"><button id="createBattleBtn" onClick="createBattle();">Create Battle</button></th>
+                  <th style="width:45%"></th>
+                  <!-- <th style="width:22.5%"></th> -->
+                  <th style="display: flex;align-items: center;justify-content: flex-end;margin-bottom: 10px;width:17.5%"><button id="createBattleBtn" onClick="createBattle();">Create Battle</button></th>
                 </tr>
               </table>
               <table id="battleList">
@@ -234,7 +246,7 @@
 
   </div>
 
-  </div>
+    </div>
 
 
   <script>
