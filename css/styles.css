@@ -92,9 +92,12 @@ body {
 .logo {
   min-height:calc(100vh - 60px);
   width: 100%;
-  /* margin-top: 20px; */
   text-align: center;
-  padding-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
   background-image: url(../assets/space3.png);
   background-repeat: repeat;
   animation: move-clouds-back 1000s linear infinite;
@@ -103,6 +106,36 @@ body {
 	from {background-position:0 0;}
 	to {background-position:10000px 0;}
 }
+.logo > h1 {
+  color: var(--maincolor);
+  font-weight: bold;
+  font-size: 3rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.logo .landing {
+  color:white;
+  width: 90%;
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(280px, 1fr) );
+  gap: 35px;
+  justify-items: center;
+  align-items: center;
+}
+.logo .landing div h2{
+  margin-bottom:20px;
+  font-weight: 700;
+}
+.logo .landing div p{
+  font-weight: 700;
+}
+.logo .landing > img{
+  width:300px;
+  border-radius:10px;
+  border: 2px solid var(--maincolor);
+  box-shadow: 0 0 2vw var(--maincolor);
+}
+
 .logo #socialIcons {
   margin-top: 20px;
 }
@@ -115,28 +148,36 @@ body {
 .logo #socialIcons img{
   width:50px;
 }
-.logo #logoCont {
+#battleRulesCont {
+  background-color: #1e1e1e;
+}
+#battleRulesCont > h2 {
+  color: white;
+  text-align: center;
   width: 90%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+#battleRulesCont .battleRules {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom:30px;
   display: grid;
   grid-template-columns: repeat( auto-fit, minmax(280px, 1fr) );
   gap: 35px;
 }
-.logo h1 {
-  color: var(--maincolor);
-  font-weight: bold;
-  font-size: 3rem;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.logo h2 {
+
+#battleRulesCont .battleRules h2 {
   color: white;
   font-weight: bold;
   font-size: 1.5rem;
   margin-bottom: 30px;
 }
-.logo p {
+#battleRulesCont .battleRules p {
+  text-align: center;
   color: #ffffff;
   font-size: 1rem;
   font-weight: 700;
@@ -144,21 +185,18 @@ body {
   border: 1px solid var(--maincolor);
   box-shadow: 0 0 1vw var(--maincolor);
   padding: 40px 15px 20px;
-  /* max-width:350px; */
-  /* min-width:250px; */
   position: relative;
   background-color: rgba(0,0,0,0.6);
   line-height: 1.5;
-  /* margin-bottom: 30px; */
 }
-.logo p:hover {
+#battleRulesCont .battleRules p:hover {
   transform: scale(1.01);
 }
-.logo p span {
+#battleRulesCont .battleRules p span {
   color:var(--maincolor);
   font-weight: 700;
 }
-.logo p img {
+#battleRulesCont .battleRules p img {
   width:50px;
   position:absolute;
   top:-20px;
@@ -167,6 +205,7 @@ body {
   border: 2px solid var(--maincolor);
   box-shadow: 0 0 2vw var(--maincolor);
 }
+
 .mint-button {
   border-radius: 8px;
   width:50%;
@@ -227,6 +266,7 @@ body {
 }
 #mintContainerInfo {
   width:80%;
+  font-size: 13px;
 }
 .slide-container {
   display: flex;
@@ -277,7 +317,7 @@ body {
   margin-bottom: 10px;
   width: 260px;
   min-width:260px;
-  height: 437px;
+  height: 458px;
   border-radius: 17px;
   box-shadow: 0 0 4px 2px rgb(0, 0, 0, 0.5);
   background-color: white;
@@ -521,7 +561,7 @@ body {
 #networkInfo {
   width:100%;
   height:60px;
-  background-color: #373737;
+  background-color: #1e1e1e;
   color:white;
   border-bottom: 1px solid var(--maincolor);
   display:flex;
@@ -632,7 +672,7 @@ body {
   align-items: center;
 }
 #battleListContainer {
-  width:90%;
+  width:98%;
   top: 20px;
   padding-bottom: 50px;
 }
@@ -676,7 +716,7 @@ body {
   border-radius: 7px;
   box-shadow: 0 0.6em grey;
   cursor: pointer;
-  width: 160px;
+  width: 130px;
   height: 40px;
   line-height: 1.5;
   border: 1px solid var(--maincolor);
