@@ -4,6 +4,14 @@
   --maincolor: #3c957f;
   --seconderColor: #48625c;
 }
+::-moz-selection { /* Code for Firefox */
+  color: var(--maincolor);
+  background: white;
+}
+::selection {
+  color: var(--maincolor);
+  background: white;
+}
 * {
   box-sizing: border-box;
   padding:0;
@@ -96,7 +104,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 10px 100px;
   background-image: url(../assets/space3.png);
   background-repeat: repeat;
@@ -108,25 +116,21 @@ body {
 	to {background-position:10000px 0;}
 }
 
-.logo > img {
-  filter: drop-shadow(0.45rem 0.45rem 0.6rem rgba(0, 0, 0, 0.8));
-  width:150px;
-  animation: bop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards infinite
-      alternate;
-}
+
 .logo .landing {
   color:white;
   /* width: 90%; */
-  display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
+  /* display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) ); */
   /* gap: 35px; */
   justify-items: center;
   align-items: center;
+  display:flex;
 }
-.logo .landing div {
-  padding: 20px;
+.logo .landing > div {
+  flex:1;
 }
-.logo .landing div > h1 {
+.logo .landing > div > h1 {
   color: white;
   font-weight: bold;
   font-size: 2rem;
@@ -141,11 +145,11 @@ body {
     -0.03em -0.03em 0 rgba(0, 0, 0, 1), -0.03em 0.08em 0 rgba(0, 0, 0, 1), -0.03em 0 0 rgba(0, 0, 0, 1);
   
 }
-.logo .landing div > h1 span:nth-of-type(1) {
+.logo .landing > div > h1 span:nth-of-type(1) {
   animation: bop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards infinite
       alternate;
 }
-.logo .landing div > h1 span:nth-of-type(2) {
+.logo .landing > div > h1 span:nth-of-type(2) {
   animation: bopB 1s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards
       infinite alternate;
 }
@@ -167,16 +171,22 @@ body {
     transform: scale(1) rotateZ(-3deg);
   }
 }
-.logo .landing div > h2{
+.logo .landing > div > h2{
   margin-bottom:20px;
   font-weight: 700;
   text-shadow: 0 0.1em 20px rgba(0, 0, 0, 1), 0.05em -0.03em 0 rgba(0, 0, 0, 1),
     0.05em 0.005em 0 rgba(0, 0, 0, 1), 0em 0.08em 0 rgba(0, 0, 0, 1),
     0.05em 0.08em 0 rgba(0, 0, 0, 1), 0px -0.03em 0 rgba(0, 0, 0, 1),
     -0.03em -0.03em 0 rgba(0, 0, 0, 1), -0.03em 0.08em 0 rgba(0, 0, 0, 1), -0.03em 0 0 rgba(0, 0, 0, 1);
+    background-color: white;
+    color: var(--maincolor);
+    box-shadow: 0 0 2vw #000000;
+    display: inline-block;
+    padding: 1px 10px;
+    width: 90%;
 }
 
-.logo .landing div > p{
+.logo .landing > div > p{
   font-weight: 700;
   width: 90%;
   margin-left: auto;
@@ -186,26 +196,34 @@ body {
     0.05em 0.08em 0 rgba(0, 0, 0, 1), 0px -0.03em 0 rgba(0, 0, 0, 1),
     -0.03em -0.03em 0 rgba(0, 0, 0, 1), -0.03em 0.08em 0 rgba(0, 0, 0, 1), -0.03em 0 0 rgba(0, 0, 0, 1);
 }
+
+.logo .landing > div > img{
+  filter: drop-shadow(0.45rem 0.45rem 0.6rem rgba(0, 0, 0, 0.8));
+  width:150px;
+  animation: bop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards infinite
+      alternate;
+}
+.logo .landing > div > #socialIcons {
+  margin-top: 20px;
+}
+.logo .landing > div > #socialIcons a{
+  display: inline-block;
+}
+.logo .landing > div > #socialIcons a:hover{
+  transform: scale(1.08);
+}
+.logo .landing > div > #socialIcons img{
+  width:50px;
+}
 .logo .landing > img{
   width:300px;
   margin-left: 25px;
   border-radius:10px;
   border: 2px solid var(--maincolor);
   box-shadow: 0 0 2vw var(--maincolor);
+  flex:1;
 }
 
-.logo #socialIcons {
-  margin-top: 20px;
-}
-.logo #socialIcons a{
-  display: inline-block;
-}
-.logo #socialIcons a:hover{
-  transform: scale(1.08);
-}
-.logo #socialIcons img{
-  width:50px;
-}
 #battleRulesCont {
   background-color: #1e1e1e;
   padding: 10px 50px;
@@ -945,14 +963,23 @@ canvas {
   .logo {
     padding: 50px;
   }
+  .logo .landing {
+    flex-direction: column;
+  }
+  .logo .landing > img{
+    width:90%;
+    margin-top:25px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 @media (max-width: 768px) {
   /* .logo img {
     font-size: 1rem;
   } */
-  .logo > img {
+  /* .logo > img {
     width:280px;
-  }
+  } */
   .mint-button {
     font-size: 25px;
   }
@@ -979,12 +1006,6 @@ canvas {
   .logo {
     padding: 10px;
   }
-  .logo .landing > img{
-    width:90%;
-    margin-top:25px;
-    margin-left: auto;
-    margin-right: auto;
-  }
   #battleRulesCont {
     padding: 10px;
   }
@@ -995,6 +1016,12 @@ canvas {
   }
 }
 @media (max-width: 400px) {
+  .logo .landing {
+    flex-direction: column-reverse;
+  }
+  .logo .landing > img{
+    margin-bottom:25px;
+  }
   #networkInfo {
     font-size: 0.75rem;
   }
