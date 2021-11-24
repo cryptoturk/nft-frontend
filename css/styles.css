@@ -233,6 +233,7 @@ body {
 .logo .landing > section > img:nth-of-type(1){
   width:100%;
   filter: drop-shadow(2px 3px 7px var(--maincolor));
+  transform:rotateY(45deg);
   /* animation: hologram 2s cubic-bezier(0, 1.9, 0.59, 0.91) infinite; */
 }
 /* @keyframes hologram {
