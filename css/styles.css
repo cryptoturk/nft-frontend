@@ -119,7 +119,7 @@ body {
 
 .logo .landing {
   color:white;
-  /* width: 90%; */
+  width: 90%;
   /* display: grid;
   grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) ); */
   /* gap: 35px; */
@@ -128,7 +128,7 @@ body {
   display:flex;
 }
 .logo .landing > div {
-  flex:1;
+  flex:1.2;
 }
 .logo .landing > div > h1 {
   color: white;
@@ -221,7 +221,7 @@ body {
   border-radius:10px;
   border: 2px solid var(--maincolor);
   box-shadow: 0 0 2vw var(--maincolor);
-  flex:1;
+  flex:0.8;
 }
 
 #battleRulesCont {
@@ -795,7 +795,7 @@ body {
   border-radius: 7px;
   box-shadow: 0 0.6em grey;
   cursor: pointer;
-  width: 130px;
+  width: 120px;
   height: 40px;
   line-height: 1.5;
   border: 1px solid var(--maincolor);
@@ -1017,7 +1017,7 @@ canvas {
 }
 @media (max-width: 400px) {
   .logo .landing {
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
   .logo .landing > img{
     margin-bottom:25px;
