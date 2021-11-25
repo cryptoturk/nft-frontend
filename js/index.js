@@ -602,10 +602,11 @@ async function getMonsterPower() {
       var levelGap = monsterGap[1];
       var gapPercent = (1000 - levelGap)*100/1000;
       console.log(gapPercent);
-
+      if(gapPercent <= 0) {
+        gapPercent = 0;
+      }
       document.getElementById("token" + index).innerHTML = `
       <img id="nftImg" src="${baseURI}${allTokens[index]}.png">
-
       <div class="frame-header"> 
         <p>Token Id: <span>${allTokens[index]}</span> </p>
         <p class="status" id="status${index}"></p>
@@ -623,7 +624,10 @@ async function getMonsterPower() {
         <p>Attack: <span id="attackP${index}">${monsterGap[6]}</span></p>
         <p>Defence: <span id="defenceP${index}">${monsterGap[7]}</span></p>
         <p>Speed: <span id="speedP${index}">${monsterGap[8]}</span></p>
-        
+        <p>
+          <span id="progress${index}" class="progress-bar-fill" style="width: ${gapPercent}%;">${gapPercent}%</span>
+        </p>
+        <span style="font-size: 10px;font-weight:700; color: #f44336; text-align: center;border-top: 1px solid #f44336;">to level up you need to reach 100%</span>
       </div>
       <div class="frame-level">
         <p>Level: <span id="levelP${index}">${monsterGap[0]}</span></p>
