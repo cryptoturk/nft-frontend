@@ -73,7 +73,7 @@ async function detectChainId () {
       break;
       case "0x61":
         networkText.innerText = 'Binance Smart Chain (Testnet)'
-        networkLight.style.backgroundColor = '#00ff04'
+        networkLight.style.backgroundColor = '#9eddf9'
         networkLight.style.boxShadow  = '0 0 6px 5px rgba(0, 255, 4, 0.4)'
       break;
       default:
@@ -591,38 +591,47 @@ async function getMonsterPower() {
       document.getElementById('battleListContainer').style.display = "block";
       document.getElementById('battleContainer').style.maxHeight  = "500px";
       for (let index = 0; index < allTokens.length; index++) {
-      const monsterPower = await window.contract.methods.getMonsterPower(allTokens[index]).call();
-      const monsterRecord = await window.contract.methods.getMonsterBattleRecord(allTokens[index]).call();
+      // const monsterPower = await window.contract.methods.getMonsterPower(allTokens[index]).call();
+      // const monsterRecord = await window.contract.methods.getMonsterBattleRecord(allTokens[index]).call();
+      const monsterGap = await window.contract.methods.monsters(allTokens[index]).call();
       var tokenDiv = document.createElement('div');
       tokenDiv.setAttribute("id", "token" + index);
 
       contDiv.appendChild(tokenDiv);
       
-   
+      var levelGap = monsterGap[1];
+      var gapPercent = (1000 - levelGap)*100/1000;
+      console.log(gapPercent);
+
       document.getElementById("token" + index).innerHTML = `
       <img id="nftImg" src="${baseURI}${allTokens[index]}.png">
+
       <div class="frame-header"> 
         <p>Token Id: <span>${allTokens[index]}</span> </p>
         <p class="status" id="status${index}"></p>
       </div>
       <p class="frame-type-line">
-        <span id="tokenName${index}">${monsterPower[1]}</span>
+        <span id="tokenName${index}">${monsterGap[2]}</span>
         <svg class="heart" width="20" height="20" viewBox="0 0 32 29.6">
           <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z" />
-          <text id="health${index}" x="50%" y="50%" fill="white" dominant-baseline="middle" text-anchor="middle">${monsterPower[2]}</text>
+          <text id="health${index}" x="50%" y="50%" fill="white" dominant-baseline="middle" text-anchor="middle">${monsterGap[5]}</text>
         </svg>
       </p>
       <div class="frame-text-box">
-        <p>Wins: <span id="winnings${index}">${monsterRecord[0]}</span></p>
-        <p>Losses: <span id="losings${index}">${monsterRecord[1]}</span></p>
-        <p>Attack: <span id="attackP${index}">${monsterPower[3]}</span></p>
-        <p>Defence: <span id="defenceP${index}">${monsterPower[4]}</span></p>
-        <p>Speed: <span id="speedP${index}">${monsterPower[5]}</span></p>
-        <p>Level: <span id="levelP${index}">${monsterPower[0]}</span></p>
+        <p>Wins: <span id="winnings${index}">${monsterGap[3]}</span></p>
+        <p>Losses: <span id="losings${index}">${monsterGap[4]}</span></p>
+        <p>Attack: <span id="attackP${index}">${monsterGap[6]}</span></p>
+        <p>Defence: <span id="defenceP${index}">${monsterGap[7]}</span></p>
+        <p>Speed: <span id="speedP${index}">${monsterGap[8]}</span></p>
+        
+      </div>
+      <div class="frame-level">
+        <p>Level: <span id="levelP${index}">${monsterGap[0]}</span></p>
       </div>`
-      
+        
+        
 
-        if(monsterPower[4] < monsterPower[3]) {
+        if(monsterGap[7] < monsterGap[6]) {
           document.getElementById('status' + index).innerHTML='<img src="assets/attacker.png">';
           // document.querySelector(":root").style.setProperty('--seconderColor', '#7c7c7c');
 
@@ -634,6 +643,7 @@ async function getMonsterPower() {
       }
   }
 }
+
 
 //Approve before potion payment 
 async function feed(payment,feedFunc) {
