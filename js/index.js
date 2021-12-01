@@ -20,6 +20,7 @@ var chainScan = "BscScan";
 
 var wagerToken = "BUSD";
 var wagerPrice = 1;
+var levelGapInit = 1000; //once zero level up
 
 function isConnected() {
   document.getElementById('web3-wrapper').style.display = 'flex';
@@ -591,8 +592,6 @@ async function getMonsterPower() {
       document.getElementById('battleListContainer').style.display = "block";
       document.getElementById('battleContainer').style.maxHeight  = "500px";
       for (let index = 0; index < allTokens.length; index++) {
-      // const monsterPower = await window.contract.methods.getMonsterPower(allTokens[index]).call();
-      // const monsterRecord = await window.contract.methods.getMonsterBattleRecord(allTokens[index]).call();
       const monsterGap = await window.contract.methods.monsters(allTokens[index]).call();
       var tokenDiv = document.createElement('div');
       tokenDiv.setAttribute("id", "token" + index);
@@ -600,13 +599,15 @@ async function getMonsterPower() {
       contDiv.appendChild(tokenDiv);
       
       var levelGap = monsterGap[1];
-      var gapPercent = (1000 - levelGap)*100/1000;
-      console.log(gapPercent);
+      var gapPercent = (levelGapInit - levelGap)*100/levelGapInit;
       if(gapPercent <= 0) {
         gapPercent = 0;
       }
+      
       document.getElementById("token" + index).innerHTML = `
       <img id="nftImg" src="${baseURI}${allTokens[index]}.png">
+      <p class="resting" id="resting${index}"></p>
+      <p class="restingDetails" id="restingDetails${index}"></p>
       <div class="frame-header"> 
         <p>Token Id: <span>${allTokens[index]}</span> </p>
         <p class="status" id="status${index}"></p>
@@ -625,7 +626,8 @@ async function getMonsterPower() {
         <p>Defence: <span id="defenceP${index}">${monsterGap[7]}</span></p>
         <p>Speed: <span id="speedP${index}">${monsterGap[8]}</span></p>
         <p>
-          <span id="progress${index}" class="progress-bar-fill" style="width: ${gapPercent}%;">${gapPercent}%</span>
+          <span style="position: absolute; left: 50%; transform: translateX(-50%);">${gapPercent}% evolved</span>
+          <span id="progress${index}" class="progress-bar-fill" style="width: ${gapPercent}%;"></span>
         </p>
         <span style="font-size: 10px;font-weight:700; color: #f44336; text-align: center;border-top: 1px solid #f44336;">to level up you need to reach 100%</span>
       </div>
@@ -633,7 +635,25 @@ async function getMonsterPower() {
         <p>Level: <span id="levelP${index}">${monsterGap[0]}</span></p>
       </div>`
         
-        
+        if(monsterGap[9] == true) {
+          document.getElementById('resting' + index).innerHTML='<img src="assets/zzzz.gif">';
+          const unlockDate = monsterGap[10];
+          timeConverter(unlockDate);
+
+          function timeConverter(unlockDate){
+            var a = new Date(unlockDate * 1000);
+            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            var year = a.getFullYear();
+            var month = months[a.getMonth()];
+            var date = a.getDate();
+            var hour = a.getHours();
+            var min = a.getMinutes();
+            var sec = a.getSeconds();
+            var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+            return time;
+          }
+          document.getElementById('restingDetails' + index).innerHTML=`<span>wake me up at ${timeConverter(unlockDate)}</span>`;
+        }
 
         if(monsterGap[7] < monsterGap[6]) {
           document.getElementById('status' + index).innerHTML='<img src="assets/attacker.png">';
@@ -883,7 +903,7 @@ async function updateBattles() {
           <td style="width:10%" id ="winnerBat${i}">${battles.winnerId}</td>
           <td style="width:25%;display: flex; align-items: center; justify-content: center;" id ="warBat${i}"><img src="${baseURI}${battles.p1CarId}.png"><img src="assets/vs.png"><img src="${baseURI}${battles.p2CarId}.png"></td>
           <td style="width:17.5%"><button id ="acceptBat${i}" onclick="acceptBattle(${i});">Accept Battle</button></td>
-          <td style="width:17.5%"><button id ="endBat${i}" onClick="endBattle(${i});">Upgrade ${NFTNAME}</button></td>`
+          <td style="width:17.5%"><button id ="endBat${i}" onClick="endBattle(${i});">Claim</button></td>`
 
       if(battles.ended == 2) {
         document.getElementById("endedBat" + i).innerText = "Ended";
@@ -1091,7 +1111,7 @@ async function acceptBattle2(battleId) {
               if(winner == id) {
                 Swal.fire({
                   // icon: 'success',
-                  // title: 'You won',
+                  title: 'You won, claim NFT powers',
                   // text: `TX ID: ${receipt.transactionHash}`,
                   html:`<div id="WanimationContainer">
                           <div id="tsparticles"></div>
@@ -1223,7 +1243,7 @@ async function acceptBattle2(battleId) {
               } else {
                 Swal.fire({
                   // icon: 'error',
-                  // title: 'You lost',
+                  title: 'You lost',
                   // text: `TX ID: ${receipt.transactionHash}`,
                   html:`<div id="WanimationContainer">
                           <div id="WinnerR">
