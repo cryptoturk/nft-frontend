@@ -19,7 +19,7 @@ var chainIdExplorer = "https://testnet.bscscan.com";
 var chainScan = "BscScan";
 
 var wagerToken = "BUSD";
-var wagerPrice = 1;
+var wagerPrice = 0.1;
 var levelGapInit = 200; //once zero level up
 
 function isConnected() {
@@ -1173,6 +1173,9 @@ async function feed1(payment,feedFunc) {
 
     if(ownerCheck == account[0]) {
       switch (feedFunc) {
+        case "feedMonsterWithFruit1":
+          var feedFunction = contract.methods.feedMonsterWithPotion1(id,price).send({from: account[0]})
+          break;
         case "feedMonsterWithFruit2":
           var feedFunction = contract.methods.feedMonsterWithPotion2(id,price).send({from: account[0]})
           break;
@@ -1184,21 +1187,6 @@ async function feed1(payment,feedFunc) {
           break;
         case "feedMonsterWithFruit5":
           var feedFunction = contract.methods.feedMonsterWithPotion5(id,price).send({from: account[0]})
-          break;
-        case "feedMonsterWithFruit6":
-          var feedFunction = contract.methods.feedMonsterWithPotion6(id,price).send({from: account[0]})
-          break;
-        case "feedMonsterWithFruit7":
-          var feedFunction = contract.methods.feedMonsterWithPotion7(id,price).send({from: account[0]})
-          break;
-        case "feedMonsterWithFruit8":
-          var feedFunction = contract.methods.feedMonsterWithPotion8(id,price).send({from: account[0]})
-          break;
-        case "feedMonsterWithFruit9":
-          var feedFunction = contract.methods.feedMonsterWithPotion9(id,price).send({from: account[0]})
-          break;
-        case "feedMonsterWithFruit10":
-          var feedFunction = contract.methods.feedMonsterWithPotion10(id,price).send({from: account[0]})
           break;
       
         default:
@@ -1303,7 +1291,7 @@ async function updateBattles() {
     document.getElementById('battleEmpty2').style.display = "none";
     document.getElementById('battleTableContainer').style.display = "block";
     for (let i = 0; i < battlesCount; i++) {
-      const battles = await contract.methods.battles(i).call();
+      const battles = await contract.methods.savas(i).call();
 
       var tokenDiv = document.createElement('tr');
       tokenDiv.setAttribute("id", "battle" + i);
@@ -1468,7 +1456,7 @@ async function acceptBattle2(battleId) {
   if(id) {
     const ownerCheck = await contract.methods.ownerOf(id).call();
     if(ownerCheck == account[0]) {
-      const levelCheck = await contract.methods.battles(battleId).call();
+      const levelCheck = await contract.methods.savas(battleId).call();
       const monsterPowerForLevel = await window.contract.methods.getMonsterPower(id).call();
       if (levelCheck.levels == monsterPowerForLevel[0]) {
         Swal.fire({
@@ -1483,7 +1471,7 @@ async function acceptBattle2(battleId) {
           if (result.isConfirmed) {
             contract.methods.acceptBattle(battleId,id).send({from: account[0]})
             .on('transactionHash', async function (hash) {
-              const battles = await contract.methods.battles(battleId).call();
+              const battles = await contract.methods.savas(battleId).call();
               const p1 = battles.p1CarId;
               Swal.fire({
                 html:`<div id="animationContainer">
@@ -1522,7 +1510,7 @@ async function acceptBattle2(battleId) {
             .on('receipt', async function (receipt) {
               audioPunches.pause();
               audioPunches.currentTime = 0;
-              const battles = await contract.methods.battles(battleId).call();
+              const battles = await contract.methods.savas(battleId).call();
               const winner = battles.winnerId;
               const p1 = battles.p1CarId;
               let scoreP1 = battles.scoreP1;
@@ -1766,7 +1754,7 @@ async function endBattle(battleId) {
   console.log(battleId);
   let contract = await new web3.eth.Contract(mainnetAbi, mainnetContract);
   let account = await web3.eth.getAccounts();
-  const NFTWinner = await contract.methods.battles(battleId).call();
+  const NFTWinner = await contract.methods.savas(battleId).call();
   const WinnerId = NFTWinner.winnerId;
   let NFTPower = await window.contract.methods.monsters(WinnerId).call();
   let nftAttack = NFTPower[7];
