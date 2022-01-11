@@ -225,34 +225,36 @@ body {
 .logo .landing > section {
   width:300px;
   margin-left: 25px;
-  /* border-radius:10px;
-  border: 2px solid var(--maincolor);
-  box-shadow: 0 0 2vw var(--maincolor); */
   flex:0.9;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
 }
-.logo .landing > section > img:nth-of-type(1){
+/* .logo .landing > section > img:nth-of-type(1){
   width:100%;
   animation: hiddenEffect 0.6s cubic-bezier(0.04, 0.24, 1, -1.19);
   animation-iteration-count: 5;
-  /* filter: drop-shadow(2px 3px 7px var(--maincolor)); */
-}
+} */
 
-.logo .landing > section > img:nth-of-type(2){
-  width:90%;
-  z-index: -9999; 
-  position: absolute; 
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: growEffect 1.5s cubic-bezier(0, 1.09, 1, 1.13), hiddenEffect 1s 1.5s cubic-bezier(0.04, 0.24, 1, -1.19);
+.logo .landing > section > img:nth-of-type(1){
+  display: block;
+  width:100%;
+  padding: 5px;
+  animation: hiddenEffect 0.6s cubic-bezier(0.04, 0.24, 1, -1.19);
+  animation-iteration-count: 5;
+  border-radius: 3px;
+  box-shadow: 0px 0px 5px 3px var(--maincolor), 0px 0px 2px 2px var(--maincolor);
+    border: 5px solid var(--maincolor);
+  margin-bottom:20px;
+  background-color: var(--background);
   
 }
-@keyframes growEffect {
+/* @keyframes growEffect {
 	0% {transform: translateX(-50%) translateY(100%);  }
 	100% {transform: translateX(-50%) translateY(0); }
-}
+} */
 @keyframes hiddenEffect {
 	0% {opacity:1;}
   10% {opacity:0.2;}
