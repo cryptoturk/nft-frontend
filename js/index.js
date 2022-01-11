@@ -1457,7 +1457,7 @@ async function acceptBattle2(battleId) {
     const ownerCheck = await contract.methods.ownerOf(id).call();
     if(ownerCheck == account[0]) {
       const levelCheck = await contract.methods.savas(battleId).call();
-      const monsterPowerForLevel = await window.contract.methods.getMonsterPower(id).call();
+      const monsterPowerForLevel = await window.contract.methods.monsters(id).call();
       if (levelCheck.levels == monsterPowerForLevel[0]) {
         Swal.fire({
           title: 'Are you sure?',
