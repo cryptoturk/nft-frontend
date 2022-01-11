@@ -1,5 +1,5 @@
 // according to contract these will change here
-const COST = "15000000000000000"; //0.1 BNB minting price - 100000000000000000
+const COST = "150000000000000000"; //0.1 BNB minting price - 100000000000000000
 const WAGER = "100000000000000000"; //0.1 BUSD for now
 const PPRICET1 = 5000; //mystery feed price1
 const PPRICET2 = 1500; //only health price2
