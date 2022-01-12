@@ -1,5 +1,5 @@
 // according to contract these will change here
-const COST = "150000000000000000"; //0.1 BNB minting price - 100000000000000000
+const COST = "100000000000000000"; //0.1 BNB minting price - 150000000000000000 0.15
 const WAGER = "100000000000000000"; //0.1 BUSD for now
 const PPRICET1 = 5000; //mystery feed price1
 const PPRICET2 = 1500; //only health price2
@@ -7,7 +7,7 @@ const PPRICET3 = 2000; //feed price 3 & 4 & 5
 const MAX_SUPPLY = 10000; 
 const baseURI = "https://ipfs.io/ipfs/bafybeiaba2haznuzwvwd7ztunksv2lbr5sk7biv3zgpzazprgzb3nabp6i/images/";
 
-const mainnetContract = "0xbac53C77969f93857e0fA3e8263582F24f08D7D9"; // NFT contract
+const mainnetContract = "0xA0b0dc897672c319dF99805cBC295DDF722ccACE"; // NFT contract
 const tokenContract = "0x47Ad2B1e6604A45c4d1a44245E143691317d8cc6"; //zaif token
 const wagerContract = "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7"; // busd for now
 
