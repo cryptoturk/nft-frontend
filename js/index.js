@@ -605,7 +605,8 @@ async function getMonsterPower() {
       
       var levelGen = monsterGap[1];
       var levelGap = monsterGap[2];
-      var gapPercent = (levelGen - levelGap)*100/levelGen;
+      var gapPercentRaw = (levelGen - levelGap)*100/levelGen;
+      var gapPercent = gapPercentRaw.toFixed(2);
       if(gapPercent <= 0) {
         gapPercent = 0;
       }
